@@ -5,13 +5,14 @@ import { actions } from '../store';
 
 
 function TabTwoScreen({ weatherForFewDays, loading }) {
-
+  // let date = () => {day.data.split(' ')[0] + 1 ;}
   return (
     <View style={styles.container}>
       {loading && <View style={styles.load}><ActivityIndicator color="gold" /></View>}
       <ScrollView>
         {weatherForFewDays.map( day => (
-          <View key={day.id}   style={styles.forecastForTheDay}>
+          <View key={day.id + 1} style={styles.forecastForTheDay}>
+            <Text style={styles.title}>Дата: {day.data}</Text>
             <Text style={styles.title}>Температура: {Math.floor(day.temp - 273.15)}°</Text>
             <Text style={styles.title}>Ощущается как: {Math.floor(day.feelsLike - 273.15)}°</Text>
             <Text style={styles.title}>Скорость ветра: {day.windSpeed} м/с</Text>
@@ -30,6 +31,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#b8ccea',
+    paddingTop: 30,
   },
   forecastForTheDay: {
     flex: 1,
@@ -38,7 +40,8 @@ const styles = StyleSheet.create({
     borderColor: "white",
     paddingVertical: 20,
     paddingHorizontal: 50,
-    margin:5,
+    marginHorizontal:25,
+    marginVertical: 10,
   },
   title: {
     fontSize: 20,

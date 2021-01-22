@@ -49,7 +49,7 @@ function TabOneScreen({
 
   return (
     <View  style={styles.container}>
-      <SvgAnimatedLinearGradient  x1="0" y2="1" secondaryColor='blue' width={400} height={800} position="absolute" >
+      <SvgAnimatedLinearGradient  x1="0" y2="1" secondaryColor='blue' width={400} height={900} position="absolute" >
         <LinearGradient style={styles.gradient} colors={presetColors.instagram} speed={4000}/>
         <Rect  height="100%" width="100%" position="absolute" />
       </SvgAnimatedLinearGradient >
@@ -77,39 +77,41 @@ function TabOneScreen({
               </View>    
             </View>
             {loading && <View style={styles.load}><ActivityIndicator color="gold" /></View>}      
-            {city.length > 0  && <View style={styles.weather}>    
+            {city.length > 0  && <View><View style={styles.weather}>    
               <Text style={styles.title}>{city}: {Math.floor(temp - 273.15)}°</Text>
               <Text style={styles.title}>Ощущается как: {Math.floor(feelsLike - 273.15)}°</Text>
               <Text style={styles.title}>Скорость ветра: {windSpeed} м/с</Text>
               <Text style={styles.title}>Влажность: {humidity}%</Text>
               <Text style={styles.title}>Облачность: {clouds}%</Text>
-              <View style={styles.button}>
-                <Text >Check More For:</Text>
-                <View style={styles.days}>
-                  <View style={styles.dayButton}>
-                    <Button 
-                      title="3 day" 
-                      color={"limegreen"} 
-                      onPress={() => checkMoreWeather(3)}
-                    />
-                  </View>
-                  <View style={styles.dayButton}>
-                    <Button 
-                      title="5 day" 
-                      color={"limegreen"} 
-                      onPress={() => checkMoreWeather(5)}
-                    />
-                  </View>
-                  <View style={styles.dayButton}>
-                    <Button 
-                      title="7 day" 
-                      color={"limegreen"} 
-                      onPress={() => checkMoreWeather(7)}
-                    />
-                  </View>
-                </View>
+              
+            </View>
+            <View style={styles.button}>
+            <Text>Check More For:</Text>
+            <View style={styles.days}>
+              <View style={styles.dayButton}>
+                <Button 
+                  title="3 day" 
+                  color={"limegreen"} 
+                  onPress={() => checkMoreWeather(3)}
+                />
               </View>
-            </View>}    
+              <View style={styles.dayButton}>
+                <Button 
+                  title="5 day" 
+                  color={"limegreen"} 
+                  onPress={() => checkMoreWeather(5)}
+                />
+              </View>
+              <View style={styles.dayButton}>
+                <Button 
+                  title="7 day" 
+                  color={"limegreen"} 
+                  onPress={() => checkMoreWeather(7)}
+                />
+              </View>
+            </View>
+          </View>
+          </View>}    
           </View>
         </TouchableWithoutFeedback> 
     </View>

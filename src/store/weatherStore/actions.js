@@ -1,6 +1,6 @@
 import  * as actionTYPES from "./constants";
 import axios from 'axios';
-
+import moment from 'moment';
 export function enterCity(city, weather) {
 
     return {
@@ -37,6 +37,7 @@ export function getTheWeather(city) {
               const response = await axios.get(apiUrl);
               dispatch(endLoading());
               const weather = response.data.list;
+              console.log(weather)
               for( let i = 0; i < daysCount; i++){
                 const weatherForFewDays = getState().mainState.weatherForFewDays
                 dispatch(setMoreWeather(weather[i], weatherForFewDays))
@@ -50,6 +51,7 @@ export function getTheWeather(city) {
     }
       
   export function setMoreWeather( weather, weatherForFewDays) {
+
       return {
         type: actionTYPES.WEATHER_FOR_FEW_DAYS,
         payload: [...weatherForFewDays, {
@@ -59,6 +61,7 @@ export function getTheWeather(city) {
             humidity: weather.main.humidity,
             clouds: weather.clouds.all,
             id: weather.dt,
+            data: weather.dt_txt, //.split(' ')[0]
           }
         ]
       }

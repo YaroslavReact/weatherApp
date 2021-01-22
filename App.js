@@ -9,9 +9,8 @@ export default function App() {
     return (
       <View style={styles.container}>
           <Provider store={store}>
-          <AppNavigation />
-         
-        </Provider>
+            <AppNavigation />
+          </Provider>
       </View>
     );
 }
