@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { StyleSheet, Text, View, ScrollView,ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View, ScrollView,ActivityIndicator, Button } from 'react-native';
 import { connect } from "react-redux";
 import { actions } from '../store';
 
 
-function TabTwoScreen({ weatherForFewDays, loading }) {
-  // let date = () => {day.data.split(' ')[0] + 1 ;}
+function MoreWeatherScreen({ weatherForFewDays, loading, navigation }) {
+  const goBack = () => {
+    navigation.push('MainScreen')
+  }
   return (
     <View style={styles.container}>
       {loading && <View style={styles.load}><ActivityIndicator color="gold" /></View>}
       <ScrollView>
+        <View style={styles.container}>
         {weatherForFewDays.map( day => (
           <View key={day.id + 1} style={styles.forecastForTheDay}>
             <Text style={styles.title}>Дата: {day.data}</Text>
@@ -20,6 +23,14 @@ function TabTwoScreen({ weatherForFewDays, loading }) {
             <Text style={styles.title}>Облачность: {day.clouds}%</Text>
           </View>
         ))}
+        <View style={styles.button}>
+                <Button 
+                  title="Go back" 
+                  color={"limegreen"} 
+                  onPress={() => goBack()}
+                />
+        </View>
+        </View>
       </ScrollView>
     </View>
   );
@@ -52,7 +63,13 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
-}
+  },
+  button: {
+    width: 100,
+    height: 20,
+    marginBottom: 25,
+    alignItems: 'center'
+  }
 });
 
 const mapStateToProps = state => ({
@@ -72,4 +89,4 @@ const mapDispatchToProps = dispatch => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TabTwoScreen);
+)(MoreWeatherScreen);

@@ -1,8 +1,7 @@
 import  * as actionTYPES from "./constants";
 import axios from 'axios';
-import moment from 'moment';
-export function enterCity(city, weather) {
 
+  export function enterCity(city, weather) {
     return {
           type: actionTYPES.CITY_INPUT_VALUE,
           city: city,
@@ -13,7 +12,8 @@ export function enterCity(city, weather) {
           clouds: weather.clouds.all,
         }
   }
-export function getTheWeather(city) {
+  
+  export function getTheWeather(city) {
       return async dispatch => {
             dispatch(startLoading())
             const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&APPID=c84e81f0893f9f465e10a059c0ec9606`;
@@ -37,12 +37,16 @@ export function getTheWeather(city) {
               const response = await axios.get(apiUrl);
               dispatch(endLoading());
               const weather = response.data.list;
-              console.log(weather)
-              for( let i = 0; i < daysCount; i++){
+              for( let i = 0; getState().mainState.weatherForFewDays.length <= (daysCount - 1); i++){
                 const weatherForFewDays = getState().mainState.weatherForFewDays
-                dispatch(setMoreWeather(weather[i], weatherForFewDays))
+                if(weatherForFewDays.length === 0){
+                  dispatch(setMoreWeather(weather[i], weatherForFewDays));
+                  continue;
+                }
+                if(weather[i].dt_txt.split(' ')[0] !== weatherForFewDays[weatherForFewDays.length - 1].data){
+                  dispatch(setMoreWeather(weather[i], weatherForFewDays));
+                }
               }
-              
             }catch (error) {
               console.error(error);
               dispatch(endLoading());
@@ -51,7 +55,6 @@ export function getTheWeather(city) {
     }
       
   export function setMoreWeather( weather, weatherForFewDays) {
-
       return {
         type: actionTYPES.WEATHER_FOR_FEW_DAYS,
         payload: [...weatherForFewDays, {
@@ -61,7 +64,7 @@ export function getTheWeather(city) {
             humidity: weather.main.humidity,
             clouds: weather.clouds.all,
             id: weather.dt,
-            data: weather.dt_txt, //.split(' ')[0]
+            data: weather.dt_txt.split(' ')[0],
           }
         ]
       }

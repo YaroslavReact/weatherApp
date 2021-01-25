@@ -31,11 +31,10 @@ function TabOneScreen({
   const saveHandler = () => {
     getTheWeather(text)
     setText("")
-
   }
-  const checkMoreWeather= (dayCount) => {
+  const checkMoreWeather = (dayCount) => {
     resetWeather()
-    navigation.push('MoreScreen')
+    navigation.push('MoreWeatherScreen')
     getTheWeatherForNamyDays( city, dayCount)
   }
   const presetColors = {
@@ -46,10 +45,11 @@ function TabOneScreen({
       'rgb(231, 166, 73)',
       'rgb(181, 70, 92)'
     ],}
+  const arrayOfButtonOfDaysCount = [2, 4, 6]
 
   return (
     <View  style={styles.container}>
-      <SvgAnimatedLinearGradient  x1="0" y2="1" secondaryColor='blue' width={400} height={900} position="absolute" >
+      <SvgAnimatedLinearGradient  x1="0" y2="1" secondaryColor='blue' width={500} height={900} position="absolute" >
         <LinearGradient style={styles.gradient} colors={presetColors.instagram} speed={4000}/>
         <Rect  height="100%" width="100%" position="absolute" />
       </SvgAnimatedLinearGradient >
@@ -83,32 +83,19 @@ function TabOneScreen({
               <Text style={styles.title}>Скорость ветра: {windSpeed} м/с</Text>
               <Text style={styles.title}>Влажность: {humidity}%</Text>
               <Text style={styles.title}>Облачность: {clouds}%</Text>
-              
             </View>
             <View style={styles.button}>
             <Text>Check More For:</Text>
             <View style={styles.days}>
-              <View style={styles.dayButton}>
-                <Button 
-                  title="3 day" 
-                  color={"limegreen"} 
-                  onPress={() => checkMoreWeather(3)}
-                />
-              </View>
-              <View style={styles.dayButton}>
-                <Button 
-                  title="5 day" 
-                  color={"limegreen"} 
-                  onPress={() => checkMoreWeather(5)}
-                />
-              </View>
-              <View style={styles.dayButton}>
-                <Button 
-                  title="7 day" 
-                  color={"limegreen"} 
-                  onPress={() => checkMoreWeather(7)}
-                />
-              </View>
+              {arrayOfButtonOfDaysCount.map((day) => (
+                <View key={day} style={styles.dayButton}>
+                  <Button 
+                    title={`${day} day`} 
+                    color={"limegreen"} 
+                    onPress={() => checkMoreWeather(day)}
+                  />
+                </View>
+              ))}
             </View>
           </View>
           </View>}    
@@ -129,7 +116,7 @@ const styles = StyleSheet.create({
     position: 'relative'
   },
   gradient:{
-    width: 400,
+    width: 500,
      height: 900,
      position: 'absolute',
      opacity: 0.9,
