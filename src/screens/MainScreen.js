@@ -64,7 +64,7 @@ function MainScreen({
         <Rect  height="100%" width="100%" position="absolute" />
       </SvgAnimatedLinearGradient >
         
-        <ScrollView bounses={false} keyboardShouldPersistTaps={'never'} contentContainerStyle={{ flex: 1 }}>  
+        <ScrollView bounses={false} keyboardShouldPersistTaps={'always'} contentContainerStyle={{ flex: 1 }}>  
           <View style={styles.screen}>
             <View style={styles.mainContainer}>
               <Text style={styles.head}>Узнай погоду в любом городе!</Text>

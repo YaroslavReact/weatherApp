@@ -27,8 +27,8 @@ import axios from 'axios';
             }  
       }
     }
-  function conversionResult(weatherForFewDays, daysCount, weather){
-   
+  function transformWeatherResult(daysCount, weather){
+    const weatherForFewDays = [];
     for( let i = 0; weatherForFewDays.length <= (daysCount - 1); i++){
       if(weatherForFewDays.length === 0){
         const weatherForDay = {
@@ -55,22 +55,22 @@ import axios from 'axios';
         }
         weatherForFewDays.push(weatherForDay);
       }
-
+      
     }
+    return weatherForFewDays
   }
   export function getTheWeatherForNamyDays(city, daysCount) {
       return async (dispatch) => {
-            dispatch(startLoadingForMoreWeather_Screen())
+            dispatch(startLoadingForMoreWeather())
             const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=c84e81f0893f9f465e10a059c0ec9606`;
             try {
               const response = await axios.get(apiUrl);
               const weather = response.data.list;
-              const weatherForFewDays = [];
-              conversionResult(weatherForFewDays, daysCount, weather );
+              const weatherForFewDays = transformWeatherResult(daysCount, weather);
               dispatch(setMoreWeather(weatherForFewDays));
             }catch (error) {
               console.error(error);
-              dispatch(endLoading());
+              dispatch(endLoadingForMoreWeather());
             }  
       }
     }
@@ -95,14 +95,14 @@ import axios from 'axios';
         loading: true
       }
     }
-    export function startLoadingForMoreWeather_Screen(){
+    export function startLoadingForMoreWeather(){
       return {
         type: actionTYPES.START_LOADING_FOR_MORE_WEATHER_SCREEN,
         loading: true
       }
     }
   
-    export function endLoadingForMoreWeather_Screen(){
+    export function endLoadingForMoreWeather(){
       return {
         type: actionTYPES.END_LOADING_FOR_MORE_WEATHER_SCREEN,
         loading: false
