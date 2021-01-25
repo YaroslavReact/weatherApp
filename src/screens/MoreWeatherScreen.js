@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import { actions } from '../store';
 
 
-function MoreWeatherScreen({ weatherForFewDays, loading, navigation }) {
+function MoreWeatherScreen({ weatherForFewDays, loaderForMoreWeatherScreen, navigation }) {
   const goBack = () => {
     navigation.push('MainScreen')
   }
   return (
     <View style={styles.container}>
-      {loading && <View style={styles.load}><ActivityIndicator color="gold" /></View>}
+      {loaderForMoreWeatherScreen && <View style={styles.load}><ActivityIndicator color="gold" /></View>}
       <ScrollView>
         <View style={styles.container}>
         {weatherForFewDays.map( day => (
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
 
 const mapStateToProps = state => ({
   weatherForFewDays: state.mainState.weatherForFewDays,
-  loading: state.mainState.loading,
+  loaderForMoreWeatherScreen: state.mainState.loaderForMoreWeatherScreen,
 });
 
 const mapDispatchToProps = dispatch => {

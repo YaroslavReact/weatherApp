@@ -8,7 +8,8 @@ const defultState = {
     humidity: '',
     clouds: '',
     weatherForFewDays: [],
-    loading: false
+    loading: false,
+    loaderForMoreWeatherScreen: false,
 }
 export default function gameReducers(state = defultState, action){
     switch(action.type){
@@ -21,11 +22,13 @@ export default function gameReducers(state = defultState, action){
                     windSpeed: action.windSpeed,
                     humidity: action.humidity,
                     clouds: action.clouds,
+                    loading: false,
                 };
         case actionTYPES.WEATHER_FOR_FEW_DAYS:
             return {
                 ...state,
-                weatherForFewDays: action.payload
+                weatherForFewDays: action.payload,
+                loaderForMoreWeatherScreen: false,
             }
         case actionTYPES.RESET_WEATHER:
             return {
@@ -42,6 +45,16 @@ export default function gameReducers(state = defultState, action){
                 ...state,
                 loading: action.loading
             }
+        case actionTYPES.START_LOADING_FOR_MORE_WEATHER_SCREEN:
+            return {
+                ...state,
+                loaderForMoreWeatherScreen: action.loading
+            }    
+        case actionTYPES.END_LOADING_FOR_MORE_WEATHER_SCREEN:
+            return {
+                ...state,
+                loaderForMoreWeatherScreen: action.loading
+            }    
         default: return state
     }
 }

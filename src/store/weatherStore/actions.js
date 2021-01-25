@@ -1,7 +1,7 @@
 import  * as actionTYPES from "./constants";
 import axios from 'axios';
 
-  export function enterCity(city, weather) {
+  export function setCityWeather(city, weather) {
     return {
           type: actionTYPES.CITY_INPUT_VALUE,
           city: city,
@@ -20,33 +20,54 @@ import axios from 'axios';
             try {
               const response = await axios.get(apiUrl);
               const weather = response.data;
-              dispatch(enterCity(city, weather));
-              dispatch(endLoading());
+              dispatch(setCityWeather(city, weather));
             } catch (error) {
               console.error(error);
               dispatch(endLoading());
             }  
       }
     }
+  function conversionResult(weatherForFewDays, daysCount, weather){
+   
+    for( let i = 0; weatherForFewDays.length <= (daysCount - 1); i++){
+      if(weatherForFewDays.length === 0){
+        const weatherForDay = {
+          temp: weather[i].main.temp,
+          feelsLike: weather[i].main.feels_like,
+          windSpeed: weather[i].wind.speed,
+          humidity: weather[i].main.humidity,
+          clouds: weather[i].clouds.all,
+          id: weather[i].dt,
+          data: weather[i].dt_txt.split(' ')[0],
+        }
+        weatherForFewDays.push(weatherForDay);
+        continue;
+      }
+      if(weather[i].dt_txt.split(' ')[0] !== weatherForFewDays[weatherForFewDays.length - 1].data){
+        const weatherForDay = {
+          temp: weather[i].main.temp,
+          feelsLike: weather[i].main.feels_like,
+          windSpeed: weather[i].wind.speed,
+          humidity: weather[i].main.humidity,
+          clouds: weather[i].clouds.all,
+          id: weather[i].dt,
+          data: weather[i].dt_txt.split(' ')[0],
+        }
+        weatherForFewDays.push(weatherForDay);
+      }
 
+    }
+  }
   export function getTheWeatherForNamyDays(city, daysCount) {
-      return async (dispatch, getState) => {
-            dispatch(startLoading())
+      return async (dispatch) => {
+            dispatch(startLoadingForMoreWeather_Screen())
             const apiUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&APPID=c84e81f0893f9f465e10a059c0ec9606`;
             try {
               const response = await axios.get(apiUrl);
-              dispatch(endLoading());
               const weather = response.data.list;
-              for( let i = 0; getState().mainState.weatherForFewDays.length <= (daysCount - 1); i++){
-                const weatherForFewDays = getState().mainState.weatherForFewDays
-                if(weatherForFewDays.length === 0){
-                  dispatch(setMoreWeather(weather[i], weatherForFewDays));
-                  continue;
-                }
-                if(weather[i].dt_txt.split(' ')[0] !== weatherForFewDays[weatherForFewDays.length - 1].data){
-                  dispatch(setMoreWeather(weather[i], weatherForFewDays));
-                }
-              }
+              const weatherForFewDays = [];
+              conversionResult(weatherForFewDays, daysCount, weather );
+              dispatch(setMoreWeather(weatherForFewDays));
             }catch (error) {
               console.error(error);
               dispatch(endLoading());
@@ -54,19 +75,10 @@ import axios from 'axios';
       }
     }
       
-  export function setMoreWeather( weather, weatherForFewDays) {
+  export function setMoreWeather(weatherForFewDays) {
       return {
         type: actionTYPES.WEATHER_FOR_FEW_DAYS,
-        payload: [...weatherForFewDays, {
-            temp: weather.main.temp,
-            feelsLike: weather.main.feels_like,
-            windSpeed: weather.wind.speed,
-            humidity: weather.main.humidity,
-            clouds: weather.clouds.all,
-            id: weather.dt,
-            data: weather.dt_txt.split(' ')[0],
-          }
-        ]
+        payload: weatherForFewDays,
       }
     }
 
@@ -83,10 +95,16 @@ import axios from 'axios';
         loading: true
       }
     }
-
-    export function endLoading(){
+    export function startLoadingForMoreWeather_Screen(){
       return {
-        type: actionTYPES.END_LOADING,
+        type: actionTYPES.START_LOADING_FOR_MORE_WEATHER_SCREEN,
+        loading: true
+      }
+    }
+  
+    export function endLoadingForMoreWeather_Screen(){
+      return {
+        type: actionTYPES.END_LOADING_FOR_MORE_WEATHER_SCREEN,
         loading: false
       }
     }
